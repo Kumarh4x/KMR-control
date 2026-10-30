@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const settingsStore = require('../src/main/settings-store');
 const adbManager = require('../src/main/adb-manager');
-const scrcpyRunner = require('../src/main/scrcpy-runner');
+const kmrEngineRunner = require('../src/main/kmr-engine-runner');
 const diagnosticsService = require('../src/main/diagnostics-service');
 
 console.log('--- Starting KMR Control Phase 6 (E2E & Security Audit) Tests ---');
@@ -18,9 +18,9 @@ assert.ok(mainCode.includes('shell.openExternal'), 'Missing safe external link o
 
 // Subprocess security in managers
 const adbCode = fs.readFileSync(path.resolve(__dirname, '../src/main/adb-manager.js'), 'utf8');
-const scrcpyCode = fs.readFileSync(path.resolve(__dirname, '../src/main/scrcpy-runner.js'), 'utf8');
+const engineCode = fs.readFileSync(path.resolve(__dirname, '../src/main/kmr-engine-runner.js'), 'utf8');
 assert.ok(adbCode.includes('shell: false'), 'AdbManager subprocess execution missing shell: false');
-assert.ok(scrcpyCode.includes('shell: false'), 'ScrcpyRunner subprocess execution missing shell: false');
+assert.ok(engineCode.includes('shell: false'), 'KmrEngineRunner subprocess execution missing shell: false');
 console.log('[PASS] Electron main process and subprocess configurations verified strictly secure');
 
 // 2. Audit Preload Security

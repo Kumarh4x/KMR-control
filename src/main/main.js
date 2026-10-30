@@ -4,7 +4,7 @@ const fs = require('fs');
 const os = require('os');
 const settingsStore = require('./settings-store');
 const adbManager = require('./adb-manager');
-const scrcpyRunner = require('./scrcpy-runner');
+const kmrEngineRunner = require('./kmr-engine-runner');
 const diagnosticsService = require('./diagnostics-service');
 const qrPairingService = require('./qr-pairing-service');
 
@@ -228,8 +228,8 @@ ipcMain.handle('history:clear', () => {
   return [];
 });
 
-// scrcpy Integration IPC (Phase 4)
-ipcMain.handle('scrcpy:start', async (event, customOptions = {}) => {
+// KMR Display Engine Integration IPC (Phase 4)
+const handleStartMirroring = async (event, customOptions = {}) => {
   const globalSettings = settingsStore.get('mirroring') || {};
   const mergedOptions = { ...globalSettings, ...customOptions };
 
@@ -237,28 +237,28 @@ ipcMain.handle('scrcpy:start', async (event, customOptions = {}) => {
     mainWindow?.webContents.send('mirroring:status-changed', status);
   };
 
-  const res = await scrcpyRunner.startMirroring(mergedOptions, onStatusChange);
+  const res = await kmrEngineRunner.startMirroring(mergedOptions, onStatusChange);
   if (res.success) {
     settingsStore.addHistory({
       target: mergedOptions.serial,
       status: 'MIRRORING',
-      details: `Active scrcpy session (${mergedOptions.maxResolution || 'auto'}, ${mergedOptions.bitRate || '8M'})`
+      details: `Active KMR Control mirroring session (${mergedOptions.maxResolution || 'auto'}, ${mergedOptions.bitRate || '8M'})`
     });
   }
   return res;
-});
+};
 
-ipcMain.handle('scrcpy:stop', () => {
-  return scrcpyRunner.stopMirroring();
-});
+const handleStopMirroring = () => {
+  return kmrEngineRunner.stopMirroring();
+};
 
-ipcMain.handle('scrcpy:status', () => {
-  return scrcpyRunner.getStatus();
-});
+const handleGetMirroringStatus = () => {
+  return kmrEngineRunner.getStatus();
+};
 
-ipcMain.handle('scrcpy:screenshot', async (event, serial) => {
+const handleTakeScreenshot = async (event, serial) => {
   const picturesDir = path.join(os.homedir(), 'Pictures', 'KMR-Control');
-  const res = await scrcpyRunner.takeScreenshot(serial, picturesDir);
+  const res = await kmrEngineRunner.takeScreenshot(serial, picturesDir);
   if (res.success) {
     settingsStore.addHistory({
       target: serial,
@@ -267,14 +267,14 @@ ipcMain.handle('scrcpy:screenshot', async (event, serial) => {
     });
   }
   return res;
-});
+};
 
-ipcMain.handle('scrcpy:startRecording', async (event, customOptions = {}) => {
+const handleStartRecording = async (event, customOptions = {}) => {
   const videosDir = path.join(os.homedir(), 'Videos', 'KMR-Control');
   const onStatusChange = (status) => {
     mainWindow?.webContents.send('recording:status-changed', status);
   };
-  const res = await scrcpyRunner.startRecording({ ...customOptions, outputDir: videosDir }, onStatusChange);
+  const res = await kmrEngineRunner.startRecording({ ...customOptions, outputDir: videosDir }, onStatusChange);
   if (res.success) {
     settingsStore.addHistory({
       target: customOptions.serial,
@@ -283,11 +283,27 @@ ipcMain.handle('scrcpy:startRecording', async (event, customOptions = {}) => {
     });
   }
   return res;
-});
+};
 
-ipcMain.handle('scrcpy:stopRecording', () => {
-  return scrcpyRunner.stopRecording();
-});
+const handleStopRecording = () => {
+  return kmrEngineRunner.stopRecording();
+};
+
+// Primary KMR Engine IPC channels
+ipcMain.handle('engine:start', handleStartMirroring);
+ipcMain.handle('engine:stop', handleStopMirroring);
+ipcMain.handle('engine:status', handleGetMirroringStatus);
+ipcMain.handle('engine:screenshot', handleTakeScreenshot);
+ipcMain.handle('engine:startRecording', handleStartRecording);
+ipcMain.handle('engine:stopRecording', handleStopRecording);
+
+// Legacy backward-compatibility aliases
+ipcMain.handle('scrcpy:start', handleStartMirroring);
+ipcMain.handle('scrcpy:stop', handleStopMirroring);
+ipcMain.handle('scrcpy:status', handleGetMirroringStatus);
+ipcMain.handle('scrcpy:screenshot', handleTakeScreenshot);
+ipcMain.handle('scrcpy:startRecording', handleStartRecording);
+ipcMain.handle('scrcpy:stopRecording', handleStopRecording);
 
 // Media Library IPC
 ipcMain.handle('media:list', () => {

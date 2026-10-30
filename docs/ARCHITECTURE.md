@@ -45,7 +45,7 @@ KMR Control is designed as a modular, sandboxed Windows desktop application leve
 |  |  |               |                                   |                   |  |
 |  |  |   +-----------+-----------+     +-----------------+----------------+  |  |
 |  |  |   |  Display Engine Supv  |     |     Diagnostics Service          |  |  |
-|  |  |   |  (scrcpy-runner.js)   |     |     (diagnostics-service.js)     |  |  |
+|  |  |   | (kmr-engine-runner.js)|     |     (diagnostics-service.js)     |  |  |
 |  |  |   +-----------+-----------+     +-----------------+----------------+  |  |
 |  |  |               |                                   |                   |  |
 |  |  |   +-----------+-----------------------------------+----------------+  |  |
@@ -59,8 +59,8 @@ KMR Control is designed as a modular, sandboxed Windows desktop application leve
 |                             v                           v                         |
 |                 +-----------------------+   +-----------------------+             |
 |                 |     adb.exe Server    |   |     kmr-engine.exe    |             |
-|                 |   (Android Platform   |   |   (High-Perf Display  |             |
-|                 |      Tools v37.0.1)   |   |    Engine / scrcpy)   |             |
+|                 |   (Android Platform   |   |   (High-Perf KMR      |             |
+|                 |      Tools v37.0.1)   |   |    Display Engine)    |             |
 |                 +-----------+-----------+   +-----------+-----------+             |
 +-----------------------------|---------------------------|-------------------------+
                               | TCP (5555 / dynamic)      | Video stream over TCP
@@ -82,7 +82,7 @@ KMR Control is designed as a modular, sandboxed Windows desktop application leve
 ## 2. Directory & Source Layout
 
 ```
-C:\Users\<USER>\Downloads\scrcpy-win64-v5.0.1\
+C:\Users\<USER>\Downloads\KMR Control\
 ├── .editorconfig                # Universal IDE code formatting rules
 ├── .gitattributes               # Cross-platform line endings and binary definitions
 ├── .gitignore                    # Exclusion rules for build artifacts, node_modules, logs
@@ -106,7 +106,8 @@ C:\Users\<USER>\Downloads\scrcpy-win64-v5.0.1\
 │   ├── main/                    # Electron Main Process (Node.js runtime)
 │   │   ├── main.js              # Application entry, window creation, IPC routing
 │   │   ├── adb-manager.js       # ADB command spawning, output parsing, telemetry
-│   │   ├── scrcpy-runner.js     # Engine lifecycle supervision & argument vectors
+│   │   ├── kmr-engine-runner.js # Engine lifecycle supervision & argument vectors
+│   │   ├── scrcpy-runner.js     # Backward-compatible proxy to kmr-engine-runner
 │   │   ├── qr-pairing-service.js# QR pairing state machine & mDNS watcher
 │   │   ├── diagnostics-service.js# In-memory log stream & regex redaction engine
 │   │   └── settings-store.js    # Persistent JSON storage for settings & devices
@@ -123,7 +124,8 @@ C:\Users\<USER>\Downloads\scrcpy-win64-v5.0.1\
 │   ├── smoke-test.js            # Phase 1: Binary integrity & settings store
 │   ├── phase2-dashboard-test.js # Phase 2: Telemetry parsing & process spawning
 │   ├── phase3-wireless-wizard-test.js # Phase 3: Pairing validation & zero storage
-│   ├── phase4-scrcpy-test.js    # Phase 4: Engine CLI args & process management
+│   ├── phase4-engine-test.js    # Phase 4: Engine CLI args & process management
+│   ├── phase4-scrcpy-test.js    # Phase 4: Compatibility test runner wrapper
 │   ├── phase5-diagnostics-test.js # Phase 5: Redaction engine & port update
 │   ├── phase6-e2e-test.js       # Phase 6: E2E security audit & view integrity
 │   ├── phase7-qr-pairing-test.js# Phase 7: QR protocol & independent decoding
@@ -168,8 +170,8 @@ C:\Users\<USER>\Downloads\scrcpy-win64-v5.0.1\
   4. Automatically records the device in the trusted devices list.
   5. Scrubs the temporary pairing password from memory and transitions session state to `connected`.
 
-### 3.4 Display Engine Supervisor (`src/main/scrcpy-runner.js`)
-- Supervises the high-performance screen mirroring binary (`kmr-engine.exe`, packaged from scrcpy v5.0.1).
+### 3.4 Display Engine Supervisor (`src/main/kmr-engine-runner.js`)
+- Supervises the high-performance screen mirroring binary (`kmr-engine.exe`, packaged from the scrcpy v5.0.1 core display engine). Preserves a backward-compatible proxy at `src/main/scrcpy-runner.js`.
 - Converts persistent user settings into sanitized CLI argument vectors without shell concatenation:
   - `--max-size=<resolution>`
   - `--video-bit-rate=<bitrate>`

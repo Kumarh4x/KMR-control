@@ -902,7 +902,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // ==========================================
-  // 7. SCRCPY MIRRORING & MEDIA (PHASE 4)
+  // 7. KMR CONTROL MIRRORING & MEDIA (PHASE 4)
   // ==========================================
   let isCurrentlyMirroring = false;
   let isCurrentlyRecording = false;
@@ -951,7 +951,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // Listen for background scrcpy status changes (e.g. user closed scrcpy window or device disconnected)
+  // Listen for background display engine status changes (e.g. user closed mirror window or device disconnected)
   if (window.kmrApi && window.kmrApi.onMirroringStatusChanged) {
     window.kmrApi.onMirroringStatusChanged((status) => {
       if (!status.active) {

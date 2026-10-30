@@ -78,7 +78,7 @@ copyRecursive(path.join(rootDir, 'src'), path.join(appDir, 'src'));
 // 5. Bundle Engine Components (Renaming executable to kmr-engine.exe)
 console.log('[5/6] Bundling KMR Control Engine & ADB runtime libraries...');
 const engineFiles = [
-  { src: 'scrcpy.exe', dest: 'kmr-engine.exe' }, // Renamed safely to kmr-engine.exe
+  { src: fs.existsSync(path.join(rootDir, 'kmr-engine.exe')) ? 'kmr-engine.exe' : 'scrcpy.exe', dest: 'kmr-engine.exe' },
   { src: 'adb.exe', dest: 'adb.exe' },
   { src: 'scrcpy-server', dest: 'scrcpy-server' },
   { src: 'SDL3.dll', dest: 'SDL3.dll' },

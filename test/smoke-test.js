@@ -5,7 +5,7 @@ const settingsStore = require('../src/main/settings-store');
 
 console.log('--- Starting KMR Control Phase 1 Smoke Test ---');
 
-// 1. Verify scrcpy and adb prebuilt binaries exist and are unmodified
+// 1. Verify engine and ADB prebuilt binaries exist and are unmodified
 const rootDir = path.resolve(__dirname, '..');
 const requiredFiles = [
   'scrcpy.exe',

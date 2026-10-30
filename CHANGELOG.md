@@ -41,6 +41,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **Portable Packaging:**
   - Standalone portable Windows x64 build script bundling the Electron runtime, renamed engine (`kmr-engine.exe`), ADB, scrcpy-server, and required codec libraries.
   - Can be launched directly from the release folder without requiring Node.js or npm.
+- **Unified Product Identity & Internal Architecture Standardization:**
+  - Rebranded engine supervisor to `src/main/kmr-engine-runner.js` (`KmrEngineRunner`) with high-performance `kmr-engine.exe` binary execution while maintaining a backward-compatible proxy at `src/main/scrcpy-runner.js`.
+  - Refactored IPC channels to `engine:*` with legacy `scrcpy:*` event handler aliases for full backward compatibility.
+  - Standardized application package identity (`kmr-control`), window branding (`KMR Control`), logging categories, and test suite runner (`phase4-engine-test.js`).
+  - Preserved all required open-source third-party legal notices and licenses (scrcpy under Apache 2.0, ADB under Apache 2.0, QR generator under MIT, Electron under MIT).
 
 ### Fixed
 - Fixed QR code recognition failure on Android camera scanners by replacing the generator with a complete ISO/IEC 18004 Model 2 implementation featuring full 8-mask penalty calculations, Error Correction Level Medium (`'M'`), and high-contrast vector SVG output.

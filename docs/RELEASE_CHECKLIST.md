@@ -57,7 +57,7 @@ This checklist defines the steps required by maintainers to validate, package, a
   - Default: `C:\Users\<USER>\Downloads\KMR Control\` (or path set by `KMR_OUTPUT_DIR`).
   - Required files present:
     - `KMR Control.exe`
-    - `kmr-engine.exe` (renamed scrcpy v5.0.1 engine)
+    - `kmr-engine.exe` (KMR Control display engine)
     - `adb.exe` (Android platform-tools)
     - `scrcpy-server`
     - `SDL3.dll`, `avcodec-63.dll`, `avformat-63.dll`, `avutil-61.dll`, `swresample-7.dll`, `libusb-1.0.dll`, `AdbWinApi.dll`, `AdbWinUsbApi.dll`

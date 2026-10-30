@@ -159,7 +159,7 @@ Or run individual test suites:
 npm test                           # Phase 1: Smoke test & settings integrity
 node test/phase2-dashboard-test.js # Phase 2: Telemetry & real ADB execution
 node test/phase3-wireless-wizard-test.js # Phase 3: Pairing validation & security
-node test/phase4-scrcpy-test.js    # Phase 4: Engine args & process supervision
+node test/phase4-engine-test.js    # Phase 4: Engine args & process supervision
 node test/phase5-diagnostics-test.js # Phase 5: Log redaction & resilience
 node test/phase6-e2e-test.js       # Phase 6: E2E audit, themes & UI integrity
 node test/phase7-qr-pairing-test.js# Phase 7: QR protocol & independent decoding
@@ -188,7 +188,7 @@ KMR Control utilizes a strict three-tier architecture:
                                                    |                                         |
                                                    v                                         v
                                               [adb.exe]                              [kmr-engine.exe]
-                                        (Android Debug Bridge)                    (scrcpy Display Engine)
+                                        (Android Debug Bridge)                    (KMR Display Engine)
 ```
 
 - **Renderer (`src/renderer/`):** Pure HTML5/CSS3/JavaScript UI layer. Strictly sandboxed with zero direct access to Node.js APIs or file system primitives.

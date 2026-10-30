@@ -45,13 +45,13 @@ contextBridge.exposeInMainWorld('kmrApi', {
   },
   getMdnsServices: () => ipcRenderer.invoke('adb:getMdnsServices'),
 
-  // Scrcpy (Phase 4)
-  startMirroring: (options) => ipcRenderer.invoke('scrcpy:start', options),
-  stopMirroring: () => ipcRenderer.invoke('scrcpy:stop'),
-  getMirroringStatus: () => ipcRenderer.invoke('scrcpy:status'),
-  takeScreenshot: (serial) => ipcRenderer.invoke('scrcpy:screenshot', serial),
-  startRecording: (options) => ipcRenderer.invoke('scrcpy:startRecording', options),
-  stopRecording: () => ipcRenderer.invoke('scrcpy:stopRecording'),
+  // KMR Display Engine (Phase 4)
+  startMirroring: (options) => ipcRenderer.invoke('engine:start', options),
+  stopMirroring: () => ipcRenderer.invoke('engine:stop'),
+  getMirroringStatus: () => ipcRenderer.invoke('engine:status'),
+  takeScreenshot: (serial) => ipcRenderer.invoke('engine:screenshot', serial),
+  startRecording: (options) => ipcRenderer.invoke('engine:startRecording', options),
+  stopRecording: () => ipcRenderer.invoke('engine:stopRecording'),
   onMirroringStatusChanged: (callback) => {
     ipcRenderer.on('mirroring:status-changed', (_event, value) => callback(value));
   },

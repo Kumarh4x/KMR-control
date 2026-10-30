@@ -77,7 +77,7 @@ node test/phase2-dashboard-test.js
 node test/phase3-wireless-wizard-test.js
 
 # Phase 4: Display engine integration & argument vector generation
-node test/phase4-scrcpy-test.js
+node test/phase4-engine-test.js
 
 # Phase 5: Diagnostics service, port update resilience & log redaction
 node test/phase5-diagnostics-test.js

@@ -6,7 +6,7 @@ const testSuites = [
   'test/smoke-test.js',
   'test/phase2-dashboard-test.js',
   'test/phase3-wireless-wizard-test.js',
-  'test/phase4-scrcpy-test.js',
+  'test/phase4-engine-test.js',
   'test/phase5-diagnostics-test.js',
   'test/phase6-e2e-test.js',
   'test/phase7-qr-pairing-test.js'

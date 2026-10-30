@@ -27,7 +27,7 @@ console.log(`[PASS] PIN keyword redacted: "${rawPinLog}" -> "${redactedPin}"`);
 
 // Test Username Path Redaction
 const currentUsername = os.userInfo().username;
-const rawPath = `C:\\Users\\${currentUsername}\\Downloads\\scrcpy-win64-v5.0.1\\adb.exe`;
+const rawPath = `C:\\Users\\${currentUsername}\\Downloads\\KMR Control\\adb.exe`;
 const redactedPath = diagnosticsService.redact(rawPath);
 assert.ok(!redactedPath.includes(currentUsername), `Username ${currentUsername} was NOT redacted!`);
 assert.ok(redactedPath.includes('<USER>'), 'Missing <USER> placeholder in path');
