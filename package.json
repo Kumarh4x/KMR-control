@@ -1,0 +1,24 @@
+{
+  "name": "kmr-control",
+  "version": "1.0.0",
+  "description": "KMR Control - Native Windows Desktop Application for Wireless Android Control",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/smoke-test.js",
+    "test:all": "node scripts/run-all-tests.js",
+    "package": "node scripts/package.js"
+  },
+  "keywords": [
+    "kmr-control",
+    "android",
+    "wireless",
+    "mirroring",
+    "windows"
+  ],
+  "author": "KMR",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "electron": "^45.1.0"
+  }
+}

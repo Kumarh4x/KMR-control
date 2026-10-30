@@ -1,0 +1,26 @@
+KMR Control
+Copyright (c) 2026 KMR Control Project
+
+This application bundles the following third-party open-source components:
+
+================================================================
+1. scrcpy & Android Debug Bridge (ADB)
+================================================================
+License: Apache License, Version 2.0
+Source & Attribution: Genymobile (https://github.com/Genymobile/scrcpy)
+The binary 'kmr-engine.exe' is the official prebuilt scrcpy v5.0.1 binary,
+renamed for application process namespace management without internal modification.
+Full terms: See LICENSE.txt in this directory.
+
+================================================================
+2. Electron & Chromium
+================================================================
+License: MIT License / BSD License
+Copyright (c) Electron contributors / The Chromium Authors
+See LICENSE and LICENSES.chromium.html in this directory.
+
+================================================================
+3. FFmpeg & SDL
+================================================================
+avcodec-63.dll, avformat-63.dll, avutil-61.dll, swresample-7.dll, SDL3.dll
+Included unmodified under their respective LGPL v2.1+ / zlib / Apache licenses.

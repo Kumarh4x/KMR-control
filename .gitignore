@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+
+# Production, Packaging & Release Outputs
+dist/
+out/
+build/
+*.zip
+*.log
+
+# Standalone Portable Executable & Electron Runtime (Preserved in root for direct launch)
+/KMR Control.exe
+/resources/
+/locales/
+/*.pak
+/*.dat
+/*.bin
+/version
+/d3dcompiler_47.dll
+/dxcompiler.dll
+/electron_wer.dll
+/ffmpeg.dll
+/vk_swiftshader.dll
+/vk_swiftshader_icd.json
+/vulkan-1.dll
+/LICENSE
+/LICENSES.chromium.html
+/README.txt
+
+# Local User Settings & Runtime Caches
+settings.json
+.kmr-control/
+
+# Secrets and Local Environment
+.env
+.env.local
+.env.*.local
+
+# Operating System and Editor Files
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

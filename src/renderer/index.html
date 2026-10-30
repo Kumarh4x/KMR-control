@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-theme-mode="system">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
+  <title>KMR Control</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <!-- Custom Windows 11 Title Bar -->
+  <header class="window-titlebar">
+    <div class="titlebar-drag-area">
+      <svg class="titlebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <rect x="5" y="2" width="14" height="20" rx="3" stroke-width="2" stroke="currentColor"/>
+        <line x1="12" y1="18" x2="12" y2="18.01" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="9" cy="5" r="0.5" fill="currentColor"/>
+        <circle cx="15" cy="5" r="0.5" fill="currentColor"/>
+      </svg>
+      <span class="titlebar-title">KMR Control</span>
+      <span id="titlebar-status-badge" class="titlebar-badge">No Device Connected</span>
+    </div>
+    
+    <div class="titlebar-controls">
+      <button id="btn-minimize" class="window-btn" title="Minimize">
+        <svg viewBox="0 0 10 10"><line x1="1" y1="5" x2="9" y2="5"/></svg>
+      </button>
+      <button id="btn-maximize" class="window-btn" title="Maximize">
+        <svg viewBox="0 0 10 10"><rect x="1.5" y="1.5" width="7" height="7" fill="none"/></svg>
+      </button>
+      <button id="btn-close" class="window-btn btn-close" title="Close">
+        <svg viewBox="0 0 10 10"><line x1="1.5" y1="1.5" x2="8.5" y2="8.5"/><line x1="8.5" y1="1.5" x2="1.5" y2="8.5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <nav class="nav-group">
+        <span class="nav-header">Navigation</span>
+        
+        <button class="nav-item active" data-tab="tab-dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="3" width="7" height="9" rx="1"/>
+            <rect x="14" y="3" width="7" height="5" rx="1"/>
+            <rect x="14" y="12" width="7" height="9" rx="1"/>
+            <rect x="3" y="16" width="7" height="5" rx="1"/>
+          </svg>
+          Dashboard
+        </button>
+
+        <button class="nav-item" data-tab="tab-wireless">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+            <line x1="12" y1="20" x2="12.01" y2="20"/>
+          </svg>
+          Wireless Connection
+        </button>
+
+        <button class="nav-item" data-tab="tab-controls">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="5" y="2" width="14" height="20" rx="3"/>
+            <circle cx="12" cy="18" r="1"/>
+          </svg>
+          Device Controls
+        </button>
+
+        <button class="nav-item" data-tab="tab-media">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polygon points="23 7 16 12 23 17 23 7"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+          Recordings & Media
+        </button>
+
+        <button class="nav-item" data-tab="tab-settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          Settings
+        </button>
+
+        <button class="nav-item" data-tab="tab-diagnostics">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Diagnostics
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="theme-selector-container">
+          <span class="theme-label">Appearance</span>
+          <div class="theme-segmented-control">
+            <button class="theme-segment-btn" data-theme-btn="light" title="Light Mode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+              Light
+            </button>
+            <button class="theme-segment-btn" data-theme-btn="dark" title="Dark Mode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+              Dark
+            </button>
+            <button class="theme-segment-btn active" data-theme-btn="system" title="Sync with Windows Theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              Auto
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Views -->
+    <main class="app-content">
+      <!-- 1. DASHBOARD TAB -->
+      <section id="tab-dashboard" class="tab-pane active">
+        <div class="view-header">
+          <div class="view-title-wrap">
+            <h1>Device Dashboard</h1>
+            <p>Live device status, wireless connection metrics, and genuine telemetry</p>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button id="btn-refresh-devices" class="btn btn-secondary btn-sm" title="Refresh ADB Devices">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 4v6h-6"/>
+                <path d="M1 20v-6h6"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+              Refresh
+            </button>
+            <button id="dash-btn-mirror" class="btn btn-primary btn-sm" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Start Mirroring
+            </button>
+          </div>
+        </div>
+
+        <!-- Connection State Banner -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">
+              <span id="dash-status-dot" class="status-dot" style="background-color: var(--status-neutral);"></span>
+              <span id="dash-device-title">No Android Device Connected</span>
+            </span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <select id="dash-device-select" class="form-input" style="padding: 3px 8px; font-size: 12px; display: none;">
+                <!-- Populated dynamically if multiple devices -->
+              </select>
+              <span id="dash-status-badge" class="status-pill disconnected">Disconnected</span>
+            </div>
+          </div>
+          
+          <div class="grid-4" style="margin-top: 12px;">
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Device Model</div>
+              <div id="dash-metric-model" style="font-size: 13.5px; font-weight: 600; margin-top: 4px; color: var(--text-muted);">Unavailable</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Android Version</div>
+              <div id="dash-metric-version" style="font-size: 13.5px; font-weight: 600; margin-top: 4px; color: var(--text-muted);">Unavailable</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">IP Address</div>
+              <div id="dash-metric-ip" style="font-size: 13.5px; font-weight: 600; margin-top: 4px; color: var(--text-muted);">Unavailable</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Battery Level</div>
+              <div id="dash-metric-battery" style="font-size: 13.5px; font-weight: 600; margin-top: 4px; color: var(--text-muted);">Unavailable</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics & Active Mirroring Info -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Display & Hardware</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Native Resolution:</span>
+                <span id="dash-spec-resolution" style="font-weight: 600; color: var(--text-muted);">Unavailable</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Screen Density:</span>
+                <span id="dash-spec-density" style="font-weight: 600; color: var(--text-muted);">Unavailable</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Connection Protocol:</span>
+                <span id="dash-spec-protocol" style="font-weight: 600; color: var(--text-muted);">Disconnected</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Authorization:</span>
+                <span id="dash-spec-auth" style="font-weight: 600; color: var(--text-muted);">None</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Active Mirroring Profile</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Target Resolution:</span>
+                <span id="dash-cfg-res" style="font-weight: 600;">Auto</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Video Bitrate:</span>
+                <span id="dash-cfg-bitrate" style="font-weight: 600;">8 Mbps</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Target FPS:</span>
+                <span id="dash-cfg-fps" style="font-weight: 600;">60 FPS</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Display Engine:</span>
+                <span style="font-weight: 600; color: var(--status-success);">KMR Engine (Active)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Bar -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Quick Actions</span>
+          </div>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button id="btn-quick-screenshot" class="btn btn-secondary" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              Take Screenshot
+            </button>
+            <button id="btn-quick-record" class="btn btn-secondary" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+              Record Screen
+            </button>
+            <button id="btn-quick-fullscreen" class="btn btn-secondary" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              Fullscreen Mirror
+            </button>
+            <button id="btn-quick-disconnect" class="btn btn-danger" style="margin-left: auto;" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Disconnect
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Connection Activity -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Recent Connection Activity</span>
+            <button id="btn-clear-history" class="btn btn-secondary btn-sm" style="font-size: 11.5px; padding: 3px 8px;">Clear History</button>
+          </div>
+          <div id="dash-history-list" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 13px; color: var(--text-muted); font-style: italic; padding: 6px 0;">No connection activity recorded yet.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. WIRELESS CONNECTION WIZARD TAB -->
+      <section id="tab-wireless" class="tab-pane">
+        <div class="view-header">
+          <div class="view-title-wrap">
+            <h1>Wireless Connection Wizard</h1>
+            <p>Connect your Android phone wirelessly without requiring any USB cable (Android 11+)</p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button id="wizard-tab-qr" class="btn btn-primary btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Pair with QR Code
+            </button>
+            <button id="wizard-tab-pair" class="btn btn-secondary btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              Pair with Pairing Code
+            </button>
+            <button id="wizard-tab-direct" class="btn btn-secondary btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+              Direct Connect
+            </button>
+            <button id="wizard-tab-trusted" class="btn btn-secondary btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Trusted Devices
+            </button>
+          </div>
+        </div>
+
+        <!-- 0. PAIR WITH QR CODE VIEW (DEFAULT PRIMARY OPTION) -->
+        <div id="wizard-view-qr">
+          <!-- Step-by-Step Instructions -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Android 11+ Wireless Debugging — QR Code Pairing
+              </span>
+              <span class="status-pill connected" style="font-size: 11px;">Fastest &amp; Recommended</span>
+            </div>
+            
+            <div class="qr-steps-list">
+              <div class="qr-step-item">
+                <div class="qr-step-num">1</div>
+                <div class="qr-step-content">
+                  <b>Turn on Wireless Debugging:</b><br>
+                  Open <b>Settings</b> &gt; <b>Developer options</b> &gt; toggle <b>Wireless debugging</b> ON.
+                </div>
+              </div>
+              <div class="qr-step-item">
+                <div class="qr-step-num">2</div>
+                <div class="qr-step-content">
+                  <b>Select QR Pairing:</b><br>
+                  Tap the text <i>"Wireless debugging"</i>, then tap <b>"Pair device with QR code"</b>.
+                </div>
+              </div>
+              <div class="qr-step-item">
+                <div class="qr-step-num">3</div>
+                <div class="qr-step-content">
+                  <b>Scan &amp; Connect:</b><br>
+                  Aim your phone camera at the QR code below. KMR Control connects automatically!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active QR Code Display Card -->
+          <div class="card qr-container-card">
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 520px; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="qr-status-dot" class="status-dot status-dot-pulse" style="background-color: var(--accent-primary);"></span>
+                <span id="qr-status-text" style="font-size: 13.5px; font-weight: 600; color: var(--text-primary);">Waiting for device to scan...</span>
+              </div>
+              <span id="qr-timer-badge" class="status-pill warning" style="font-size: 11px;">Expires in: 90s</span>
+            </div>
+
+            <!-- QR Code Render Container -->
+            <div class="qr-box-wrapper" id="qr-box-wrapper">
+              <div id="qr-code-svg-container" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                <div style="color: var(--text-muted); font-size: 12px;">Generating pairing QR code...</div>
+              </div>
+            </div>
+
+            <div id="qr-session-info" style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
+              Service: <span id="qr-service-name" style="font-family: monospace; color: var(--text-primary); font-weight: 600;">kmr-waiting</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;">
+              <button id="btn-refresh-qr" class="btn btn-secondary btn-sm">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Refresh QR Code
+              </button>
+              <button id="btn-cancel-qr" class="btn btn-danger btn-sm">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Cancel Pairing
+              </button>
+            </div>
+
+            <!-- Status Alert for Success / Error / Timeout -->
+            <div id="qr-status-alert" style="display: none; width: 100%; max-width: 520px; margin-top: 16px; padding: 10px 14px; border-radius: var(--radius-md); font-size: 12.5px; text-align: left; line-height: 1.5;"></div>
+
+            <!-- Manual Fallback Link -->
+            <div style="margin-top: 18px; font-size: 12.5px; color: var(--text-secondary); border-top: 1px solid var(--border-subtle); padding-top: 14px; width: 100%; max-width: 520px;">
+              Camera not scanning or Wi-Fi AP isolation active?
+              <button id="btn-switch-to-pin" class="btn btn-secondary btn-sm" style="display: inline-flex; margin-left: 8px; padding: 3px 8px; font-size: 11.5px;">
+                Switch to 6-Digit Pairing Code
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. PAIR NEW DEVICE VIEW (6-DIGIT CODE WIZARD) -->
+        <div id="wizard-view-pair" style="display: none;">
+          <!-- Stage A: Phone Setup Instructions Card -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Stage A — Prepare Your Phone (Android 11+)
+              </span>
+              <span class="status-pill warning" style="font-size: 11px;">Zero USB Required</span>
+            </div>
+            <div style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div>
+                <b style="color: var(--text-primary);">1. Enable Wireless Debugging:</b>
+                <ul style="margin: 6px 0 0 18px; display: flex; flex-direction: column; gap: 4px;">
+                  <li>Open <b>Settings</b> &gt; <b>About phone</b> &gt; tap <b>Build number</b> 7 times.</li>
+                  <li>Go to <b>Settings</b> &gt; <b>Developer options</b>.</li>
+                  <li>Enable <b>Wireless debugging</b> and connect to your local Wi-Fi.</li>
+                </ul>
+              </div>
+              <div>
+                <b style="color: var(--text-primary);">2. Open the Pairing Code Dialog:</b>
+                <ul style="margin: 6px 0 0 18px; display: flex; flex-direction: column; gap: 4px;">
+                  <li>Tap the text <b>"Wireless debugging"</b> to open its full screen.</li>
+                  <li>Tap <b>"Pair device with pairing code"</b>.</li>
+                  <li>Keep this dialog open on your phone until pairing completes!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage B & C: Input Form Card -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                Stage B & C — Enter Phone Pairing Information
+              </span>
+            </div>
+
+            <!-- Important Note regarding Ports -->
+            <div style="background-color: var(--bg-surface-elevated); border-left: 3px solid var(--accent-primary); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+              <b style="color: var(--text-primary);">Notice:</b> Android displays <b>two separate ports</b>:
+              <br>• <b>Pairing Port:</b> Displayed inside the temporary <i>"Pair with pairing code"</i> dialog.
+              <br>• <b>Connection Port:</b> Displayed on the main <i>"Wireless debugging"</i> settings screen.
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Phone Wi-Fi IP Address *</label>
+                <input id="pair-ip" type="text" class="form-input" placeholder="e.g. 192.168.1.150" autocomplete="off" spellcheck="false">
+                <span id="err-pair-ip" style="font-size: 11px; color: var(--status-danger); display: none;"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Temporary Wi-Fi Pairing Code (6 Digits) *</label>
+                <input id="pair-code" type="text" class="form-input" placeholder="e.g. 482910" maxlength="6" autocomplete="off" spellcheck="false" style="font-family: monospace; letter-spacing: 2px; font-weight: 600;">
+                <span id="err-pair-code" style="font-size: 11px; color: var(--status-danger); display: none;"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Pairing Port (from popup) *</label>
+                <input id="pair-port" type="number" class="form-input" placeholder="e.g. 41253" min="1024" max="65535" autocomplete="off">
+                <span id="err-pair-port" style="font-size: 11px; color: var(--status-danger); display: none;"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">ADB Connection Port (from main screen) *</label>
+                <input id="connect-port" type="number" class="form-input" placeholder="e.g. 38421" min="1024" max="65535" autocomplete="off">
+                <span id="err-connect-port" style="font-size: 11px; color: var(--status-danger); display: none;"></span>
+              </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 4px;">
+              <div class="form-group">
+                <label class="form-label">Device Friendly Name (Optional)</label>
+                <input id="pair-alias" type="text" class="form-input" placeholder="e.g. Pixel 8 / Galaxy S24" maxlength="40">
+              </div>
+
+              <div class="form-group" style="justify-content: flex-end; padding-bottom: 6px;">
+                <label style="font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-primary);">
+                  <input type="checkbox" id="pair-remember" checked>
+                  Remember this device for 1-click reconnect
+                </label>
+                <span style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
+                  (PIN codes are strictly transient and never saved)
+                </span>
+              </div>
+            </div>
+
+            <div id="pair-status-alert" style="display: none; padding: 12px 14px; border-radius: var(--radius-md); font-size: 13px; margin: 16px 0;"></div>
+
+            <div style="display: flex; gap: 12px; margin-top: 10px; align-items: center;">
+              <button id="btn-execute-pairing" class="btn btn-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Pair &amp; Connect Device
+              </button>
+              <button id="btn-reset-pairing" class="btn btn-secondary">Clear Inputs</button>
+              <span id="pairing-spinner" style="display: none; font-size: 12.5px; color: var(--accent-primary); font-weight: 500;">
+                Connecting... Please wait
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. DIRECT CONNECT VIEW (Already Paired) -->
+        <div id="wizard-view-direct" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Direct Wireless Connect (Pre-Paired Device)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">
+              If this phone was previously paired with this PC, you only need to enter its current Wi-Fi IP and active connection port from the Wireless Debugging screen.
+            </p>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Phone IP Address *</label>
+                <input id="direct-ip" type="text" class="form-input" placeholder="e.g. 192.168.1.150">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Active Connection Port *</label>
+                <input id="direct-port" type="number" class="form-input" placeholder="e.g. 38421" min="1024" max="65535">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Device Alias (Optional)</label>
+              <input id="direct-alias" type="text" class="form-input" placeholder="e.g. Office Phone">
+            </div>
+            <div id="direct-status-alert" style="display: none; padding: 12px 14px; border-radius: var(--radius-md); font-size: 13px; margin: 12px 0;"></div>
+            <div style="display: flex; gap: 12px; margin-top: 8px;">
+              <button id="btn-execute-direct-connect" class="btn btn-primary">Connect Device</button>
+              <button id="btn-reset-direct" class="btn btn-secondary">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. TRUSTED DEVICES VIEW -->
+        <div id="wizard-view-trusted" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Trusted / Saved Devices</span>
+              <button id="btn-refresh-trusted" class="btn btn-secondary btn-sm">Refresh List</button>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">
+              Easily reconnect to devices you have previously authorized. If your phone rebooted or reconnected to Wi-Fi, its connection port may have changed.
+            </p>
+            <div id="trusted-devices-list" style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="font-size: 13px; color: var(--text-muted); font-style: italic; padding: 6px 0;">No saved devices found.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. DEVICE CONTROLS TAB -->
+      <section id="tab-controls" class="tab-pane">
+        <div class="view-header">
+          <div class="view-title-wrap">
+            <h1>Device Controls</h1>
+            <p>Remote navigation, hardware buttons, and quick actions</p>
+          </div>
+        </div>
+        
+        <div class="grid-2">
+          <!-- Navigation & System Buttons -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">System Navigation</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+              <button class="btn btn-secondary btn-control-key" data-key="4" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back
+              </button>
+              <button class="btn btn-secondary btn-control-key" data-key="3" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Home
+              </button>
+              <button class="btn btn-secondary btn-control-key" data-key="187" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                Recent Apps
+              </button>
+              <button class="btn btn-secondary btn-control-key" data-key="26" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+                Power
+              </button>
+              <button class="btn btn-secondary btn-control-key" data-key="223" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                Sleep Screen
+              </button>
+              <button class="btn btn-secondary btn-control-key" data-key="83" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+                Notifications
+              </button>
+            </div>
+          </div>
+
+          <!-- Volume & Audio Controls -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Audio & Media</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+              <button class="btn btn-secondary btn-control-key" data-key="24" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                Volume Up
+              </button>
+              <button class="btn btn-secondary btn-control-key" data-key="25" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                Volume Down
+              </button>
+              <button class="btn btn-secondary btn-control-key" data-key="164" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                Mute Volume
+              </button>
+              <button class="btn btn-secondary btn-control-key" data-key="85" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Play / Pause
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. RECORDINGS & SCREENSHOTS TAB -->
+      <section id="tab-media" class="tab-pane">
+        <div class="view-header">
+          <div class="view-title-wrap">
+            <h1>Recordings &amp; Screenshots</h1>
+            <p>Browse and open captured device screenshots and MP4 screen recordings</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="btn-open-screenshots-folder" class="btn btn-secondary btn-sm">Open Screenshots Folder</button>
+            <button id="btn-open-recordings-folder" class="btn btn-secondary btn-sm">Open Videos Folder</button>
+            <button id="btn-refresh-media" class="btn btn-secondary btn-sm">Refresh</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Media Library</span>
+          </div>
+          <div id="media-library-list" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 13px; color: var(--text-muted); font-style: italic; padding: 6px 0;">No media captures found. Take a screenshot or record a video using Quick Actions.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. SETTINGS TAB -->
+      <section id="tab-settings" class="tab-pane">
+        <div class="view-header">
+          <div class="view-title-wrap">
+            <h1>Application Settings</h1>
+            <p>Configure display quality, framerate limits, and window behavior</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Display &amp; Performance Configuration</span>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Max Resolution</label>
+              <select id="setting-resolution" class="form-input">
+                <option value="auto">Automatic (Device Native)</option>
+                <option value="1920">1920 px (1080p limit)</option>
+                <option value="1440">1440 px</option>
+                <option value="1280">1280 px (720p)</option>
+                <option value="1024">1024 px (Performance)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Video Bitrate</label>
+              <select id="setting-bitrate" class="form-input">
+                <option value="16M">16 Mbps (High Quality)</option>
+                <option value="8M" selected>8 Mbps (Recommended)</option>
+                <option value="4M">4 Mbps (Low Latency / Weak Wi-Fi)</option>
+                <option value="2M">2 Mbps (Minimal)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max Frame Rate (FPS)</label>
+              <select id="setting-fps" class="form-input">
+                <option value="60" selected>60 FPS</option>
+                <option value="90">90 FPS (High Refresh)</option>
+                <option value="120">120 FPS (Ultra)</option>
+                <option value="30">30 FPS (Battery Saver)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Window Behavior</label>
+              <div style="display: flex; gap: 16px; margin-top: 8px;">
+                <label style="font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" id="setting-always-on-top"> Always on Top
+                </label>
+                <label style="font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" id="setting-fullscreen"> Fullscreen on Launch
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. DIAGNOSTICS & TROUBLESHOOTING TAB -->
+      <section id="tab-diagnostics" class="tab-pane">
+        <div class="view-header">
+          <div class="view-title-wrap">
+            <h1>Diagnostics &amp; Troubleshooting</h1>
+            <p>Sensitive data redaction, real-time wireless diagnostics, and connection troubleshooting</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="btn-export-report" class="btn btn-secondary btn-sm">Export System Report</button>
+            <button id="btn-copy-diagnostics" class="btn btn-primary btn-sm">Copy Redacted Logs</button>
+            <button id="btn-clear-diagnostics" class="btn btn-secondary btn-sm">Clear Logs</button>
+          </div>
+        </div>
+
+        <!-- Engine & Runtime Card -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Runtime Environment</span>
+            <span class="status-pill connected" style="font-size: 11px;">Zero Shell Concatenation (Secure)</span>
+          </div>
+          <div class="grid-4" style="font-size: 12.5px;">
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Display Engine</div>
+              <div style="font-weight: 600; margin-top: 3px;">KMR Engine (Windows x64)</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">ADB Bridge</div>
+              <div style="font-weight: 600; margin-top: 3px;">v37.0.1 (Bridge 1.0.41)</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Log Redaction</div>
+              <div style="font-weight: 600; margin-top: 3px; color: var(--status-success);">Active (PINs/Paths Masked)</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Process Security</div>
+              <div style="font-weight: 600; margin-top: 3px; color: var(--status-success);">Safe Array Spawning</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Redacted Log Stream -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Live Diagnostic Stream</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input id="diag-search-input" type="text" class="form-input" placeholder="Search logs..." style="padding: 4px 10px; font-size: 12px; width: 180px;">
+              <button id="btn-refresh-diag" class="btn btn-secondary btn-sm" style="padding: 4px 8px; font-size: 12px;">Refresh</button>
+            </div>
+          </div>
+          <div id="diagnostics-log-box" style="height: 200px; overflow-y: auto; background-color: var(--bg-app); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 10px; font-family: monospace; font-size: 11.5px; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 4px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Interactive Troubleshooting Knowledge Base -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Wireless Debugging Troubleshooting Guide
+            </span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+            <div style="padding: 10px 14px; background-color: var(--bg-surface-elevated); border-radius: var(--radius-md); border-left: 3px solid var(--status-warning);">
+              <b style="color: var(--text-primary);">1. "Connection Refused" after rebooting or reconnecting to Wi-Fi</b>
+              <p style="margin-top: 4px;">
+                On Android 11+, the <b>connection port is assigned dynamically</b> whenever Wireless Debugging toggles or Wi-Fi reconnects (e.g. changing from port 38421 to 41295).<br>
+                <b>Solution:</b> Open <i>Settings &gt; Developer Options &gt; Wireless Debugging</i> on your phone to check the new port, then either use <b>Direct Connect</b> or update the port on your saved device. You <b>do not need to pair again</b>!
+              </p>
+            </div>
+
+            <div style="padding: 10px 14px; background-color: var(--bg-surface-elevated); border-radius: var(--radius-md); border-left: 3px solid var(--status-warning);">
+              <b style="color: var(--text-primary);">2. "Device Unauthorized" or prompt not appearing</b>
+              <p style="margin-top: 4px;">
+                If your phone displays "Unauthorized", unlock your phone screen and look for the prompt titled <i>"Allow wireless debugging on this network?"</i> and check <i>"Always allow from this network"</i>.<br>
+                <b>If prompt does not appear:</b> In <i>Developer Options</i>, tap <b>"Revoke USB debugging authorizations"</b>, toggle Wireless Debugging off and on, and re-connect.
+              </p>
+            </div>
+
+            <div style="padding: 10px 14px; background-color: var(--bg-surface-elevated); border-radius: var(--radius-md); border-left: 3px solid var(--status-warning);">
+              <b style="color: var(--text-primary);">3. "Connection timed out" / PC cannot reach phone IP</b>
+              <p style="margin-top: 4px;">
+                • Ensure your PC and phone are connected to the <b>same Wi-Fi router / SSID</b>.<br>
+                • Check if your router has <b>"AP Isolation"</b> or <b>"Client Isolation"</b> enabled (common on public/guest Wi-Fi), which blocks devices from communicating with each other.<br>
+                • Ensure your phone screen is on; some phones disable Wi-Fi radio when deep sleeping unless charging.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Status Bar Footer -->
+  <footer class="status-bar">
+    <div class="status-bar-left">
+      <span id="footer-engine-status">Engine: KMR Control Engine | ADB v37.0.1</span>
+      <span>•</span>
+      <span id="footer-connection-status">No active connection</span>
+    </div>
+    <div class="status-bar-right">
+      <span>KMR Control v1.0.0</span>
+    </div>
+  </footer>
+
+  <script src="scripts/theme.js"></script>
+  <script src="scripts/qrcode.js"></script>
+  <script src="scripts/renderer.js"></script>
+</body>
+</html>
